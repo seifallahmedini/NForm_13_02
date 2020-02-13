@@ -1,0 +1,28 @@
+extends base
+
+block content
+  main.main
+    .user-view
+      .user-view__content
+        .user-view__form-container
+          h2.heading-secondary.ma-bt-md Create A new Text Question 
+          
+          //- WITH API
+          form.form.form--textquestion
+            .form__group
+              label.form__label(for='user') 
+              input#user.form__input(type='hidden', value=`${user.id}`, , name='user')
+            .form__group
+              label.form__label(for='question') Question
+              input#question.form__input(type='text', placeholder='write down the question', required, name='question')
+            .form__group
+              label.form__label(for='answerBody') description
+              textarea#answerBody.form__input(type='text', placeholder='write down the question', required, name='answerBody')
+            .form__group
+              label.form__label(for='questionSet_id') 
+              input#questionSet_id.form__input(type='hidden', value=`${_id}`, , name='questionSet_id')
+
+            .form__group.right
+              a.btn.btn--small.btn--green(href=`/newQuestion?_id=${_id}`) Back 
+              button.btn.btn--small.btn--green Create Question 
+            

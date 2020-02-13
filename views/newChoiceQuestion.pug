@@ -1,0 +1,32 @@
+extends base
+
+block content
+  main.main
+    .user-view
+      .user-view__content
+        .user-view__form-container
+          h2.heading-secondary.ma-bt-md Create A new Choice Question 
+          
+          //- WITH API
+          form.form.form--choicequestion
+            .form__group
+              label.form__label(for='user') 
+              input#user.form__input(type='hidden', value=`${user.id}`, , name='user')
+            .form__group
+              label.form__label(for='question') Question
+              input#question.form__input(type='text', placeholder='write down the question', required, name='question')
+            .form__group
+              label.form__label(for='option1') Options
+              input#option1IsCorrectAnswer.options_input(type='radio', placeholder='write down the question', name='option1IsCorrectAnswer')
+              input#option1.options_input_text(type='text', placeholder='write down the question', required, name='option1')
+              input#option2IsCorrectAnswer.options_input(type='radio', placeholder='write down the question', name='option2IsCorrectAnswer')
+              input#option2.options_input_text(type='text', placeholder='write down the question', required, name='option2')
+              input#option3IsCorrectAnswer.options_input(type='radio', placeholder='write down the question', name='option3IsCorrectAnswer')
+              input#option3.options_input_text(type='text', placeholder='write down the question', required, name='option3')
+            .form__group
+              label.form__label(for='questionSet_id') 
+              input#questionSet_id.form__input(type='hidden', value=`${_id}`, , name='questionSet_id') 
+
+            .form__group.right
+                a.btn.btn--small.btn--green(href=`/newQuestion?_id=${_id}`) Back 
+                button.btn.btn--small.btn--green Create Question 

@@ -1,0 +1,20 @@
+extends base
+
+block content
+  main.main
+    .choice-view
+      .user-view__content
+        .user-view__form-container
+          h2.heading-secondary.ma-bt-md Create A new Question Set
+
+          //- WITH API
+          form.form.form--questionSet
+            .form__group
+              label.form__label(for='user') 
+              input#user.form__input(type='hidden', value=`${user.id}`, , name='user')
+            .form__group
+              label.form__label(for='name') Name
+              input#name.form__input(type='text', placeholder='name of the question set', required, name='name')
+              
+            .form__group.right
+              button.btn.btn--small.btn--green Create Question Set 

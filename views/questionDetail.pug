@@ -1,0 +1,95 @@
+extends base
+//- include _reviewCard
+
+//- block append head
+//-   script(src='https://api.mapbox.com/mapbox-gl-js/v0.54.0/mapbox-gl.js')
+//-   link(href='https://api.mapbox.com/mapbox-gl-js/v0.54.0/mapbox-gl.css' rel='stylesheet')
+
+//- mixin overviewBox(label, text, icon)
+//-   .overview-box__detail
+//-     svg.overview-box__icon
+//-       use(xlink:href=`/img/icons.svg#icon-${icon}`)
+//-     span.overview-box__label= label
+//-     span.overview-box__text= text
+
+block content
+  section.section-header
+    .header__hero
+      .header__hero-overlay &nbsp;
+      img.header__hero-img(src=`#`, alt=`dsd`)
+
+    .heading-box
+      h1.heading-primary
+        span.truncate= `${question.question}`
+      .heading-box__group
+        //- .heading-box__detail
+        //-   svg.heading-box__icon
+        //-     use(xlink:href='/img/icons.svg#icon-clock')
+        //-   span.heading-box__text= `${question.question}`
+        .heading-box__detail
+          svg.heading-box__icon
+            use(xlink:href='/img/icons.svg#icon-map-pin')
+          span.heading-box__text= `${question.user.name}`
+        //- .heading-box__detail
+        //-   a.btn.btn--white.btn--small(href=`/newQuestion?_id=${questionSet._id}`) Create New Question
+  section.section-description
+    .overview-box
+        div
+            .overview-box__group
+            h2.heading-secondary.ma-bt-lg Question Type
+            .overview-box__detail
+                svg.overview-box__icon  
+                use(xlink:href='img/icons.svg#icon-calendar')
+                span.overview-box__label=`${question.kind}`
+
+            h2.heading-secondary.ma-bt-lg Question
+            .overview-box__detail
+                svg.overview-box__icon  
+                use(xlink:href='img/icons.svg#icon-calendar')
+                span.overview-box__label=`${question.question}`
+
+            h2.heading-secondary.ma-bt-lg Question Creator
+            .overview-box__detail
+                img.overview-box__img(src=`/img/users/${question.user.photo}` alt=alt=`Photo of ${question.user.name}`)
+                span.overview-box__label=`${question.user.role}`
+                span.overview-box__text=`${question.user.name}`
+    //- if user.role == 'admin'
+    //-   if question.kind == 'TextQuestion'
+    //-     .description-box
+    //-         h2.heading-secondary.ma-bt-lg Answer Body
+    //-         p.description__text=`${question.answerBody}`
+    //-   else 
+    //-     .description-box
+    //-         h2.heading-secondary.ma-bt-lg Answer Options
+    //-         each answerOption in question.answerOptions
+    //-             p.description__text=`${answerOption.answerBody}`
+    if user.role == 'user' || user.role == 'admin'
+      if question.kind == 'ChoiceQuestion'
+        .description-box
+            h2.heading-secondary.ma-bt-lg Answer Body
+            each answerOption in question.answerOptions
+                  //- - var optionId = 'option'+answerOption.optionNumber+'IsCorrectAnswer' 
+                  //- input.options_input(id=optionId, type='radio', name=`options`)
+                  p.description__text=`${answerOption.answerBody}`
+            form.form.form--deleteQuestion
+              .form__group
+                label.form__label(for='question') 
+                input#question.form__input(type='hidden', value=`${question._id}`, name='question')
+              .form__group
+                label.form__label(for='questionSet_id') 
+                input#questionSet_id.form__input(type='hidden', value=`${_id}`, name='questionSet_id') 
+              .form__group.right
+                button.btn.btn--small.btn--red Delete 
+      else
+        .description-box
+            h2.heading-secondary.ma-bt-lg Delete the question
+              p are you sure you want to delete this question?
+            form.form.form--deleteQuestion
+              .form__group
+                label.form__label(for='question') 
+                input#question.form__input(type='hidden', value=`${question._id}`, name='question')
+              .form__group
+                label.form__label(for='questionSet_id') 
+                input#questionSet_id.form__input(type='hidden', value=`${questionSet_id}`, name='questionSet_id') 
+              .form__group.right
+                button.btn.btn--small.btn--red Delete 

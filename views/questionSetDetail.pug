@@ -1,0 +1,161 @@
+extends base
+//- include _reviewCard
+
+//- block append head
+//-   script(src='https://api.mapbox.com/mapbox-gl-js/v0.54.0/mapbox-gl.js')
+//-   link(href='https://api.mapbox.com/mapbox-gl-js/v0.54.0/mapbox-gl.css' rel='stylesheet')
+
+//- mixin overviewBox(label, text, icon)
+//-   .overview-box__detail
+//-     svg.overview-box__icon
+//-       use(xlink:href=`/img/icons.svg#icon-${icon}`)
+//-     span.overview-box__label= label
+//-     span.overview-box__text= text
+
+block content
+  section.section-header
+    .header__hero
+      .header__hero-overlay &nbsp;
+      img.header__hero-img(src=`#`, alt=`dsd`)
+
+    .heading-box
+      h1.heading-primary
+        span= `${questionSet.name}`
+      .heading-box__group
+        .heading-box__detail
+          svg.heading-box__icon
+            use(xlink:href='/img/icons.svg#icon-clock')
+          span.heading-box__text= `${questionSet.questions.length}`
+        .heading-box__detail
+          svg.heading-box__icon
+            use(xlink:href='/img/icons.svg#icon-map-pin')
+          span.heading-box__text= `${questionSet.user.name}`
+        .heading-box__detail
+
+          - if( `${user._id}` === `${questionSet.user._id}` || `${user.role}` === 'admin' )       
+            a.btn.btn--white.btn--small(href=`/newQuestion?_id=${questionSet._id}`) Create New Question
+            -if( `${answersExists}` == 'true' )
+              a.btn.btn--white.btn--small(href=`/answers?_id=${questionSet._id}`) Answers
+
+  
+  -if ( `${questionSet.questions.length}` != 0 )
+    .card-question-container
+          form.form.form--responseSetQuestion
+            each question in questionSet.questions
+              .card-question
+                  //- .card__header
+                  //-   .card__picture
+                  //-     .card__picture-overlay &nbsp;
+                  //-     img.card__picture-img(src=``, alt=`${question.question}`)
+                  //-   h3.heading-tertirary
+                  //-     span.truncate= `${question.question}`
+                  .card__details
+                    if user.role == 'user' || user.role == 'admin'
+                      if question.kind == 'ChoiceQuestion'
+                        .response_body
+                          h2.heading-secondary.ma-bt-lg=`${question.question}`
+                            //- form.form.form--responsechoicequestion
+                            .form__group
+                              label.form__label(for='user') 
+                              input#user.form__input(type='hidden', value=`${user.id}`, name='user')
+                            .form__group
+                              label.form__label(for='question') 
+                              input#question.form__input(type='hidden', value=`${question._id}`, name='question')
+                            .form_group
+                              label.form__label(for= `options`+`${question._id}`) 
+                              each answerOption in question.answerOptions
+                                - var optionId = 'option'+answerOption.optionNumber+'IsCorrectAnswer'
+                                .option_class 
+                                  input.options_input(id=optionId, type='radio', name=`options`+`${question._id}`)
+                                  p.description__text=`${answerOption.answerBody}`                            
+                            //- .form__group.right
+                              //- button.btn.btn--small.btn--green Submit 
+                      else
+                        .response_body
+                          h2.heading-secondary.ma-bt-lg=`${question.question}`
+                            //- form.form.form--responsetextquestion
+                            .form__group
+                              label.form__label(for='user') 
+                              input#user.form__input(type='hidden', value=`${user.id}`, name='user')
+                            .form__group
+                              label.form__label(for='question') 
+                              input#question.form__input(type='hidden', value=`${question._id}`, name='question')  
+                            .form_group
+                              label.form__label(for='options')
+                              textarea#answerBody.form__input(type='text', placeholder='write down the answer', required, name='answerBody')
+                            //- .form__group
+                            //-   label.form__label(for='questionSet_id') 
+                            //-   input#questionSet_id.form__input(type='hidden', value=`${_id}`, name='questionSet_id') 
+                            //- .form__group.right
+                              //- button.btn.btn--small.btn--green Submit 
+                   
+                  .card__footer__question
+                    .card__description
+                      p
+                        span.card__footer-value="Creator"
+                        | 
+                        span.card__footer-text=`${question.user.name}`
+                    -if( `${user._id}` === `${questionSet.user._id}` || `${user.role}` === 'admin' )      
+                      a.btn.btn--green.btn--small.card__btn(href=`/questionDetail?_id=${question._id}&questionSet_id=${_id}`) View Detail 
+            .form__group
+              label.form__label(for='questionSet_id') 
+              input#questionSet_id.form__input(type='hidden', value=`${_id}`, name='questionSet_id')
+            button.btn.btn--small.btn--green Submit 
+//-   section.section-description
+//-     .overview-box
+//-       div
+//-         .overview-box__group
+//-           h2.heading-secondary.ma-bt-lg Quick facts
+
+//-           - const date = tour.startDates[0].toLocaleString('en-us', {month: 'long', year: 'numeric'})
+//-           +overviewBox('Next date', date, 'calendar')
+//-           +overviewBox('Difficulty', tour.difficulty, 'trending-up')
+//-           +overviewBox('Participants', `${tour.maxGroupSize} people`, 'user')
+//-           +overviewBox('Rating', `${tour.ratingsAverage} / 5`, 'star')
+
+//-         .overview-box__group
+//-           h2.heading-secondary.ma-bt-lg Your tour guides
+
+//-           each guide in tour.guides
+//-             .overview-box__detail
+//-               img.overview-box__img(src=`/img/users/${guide.photo}`, alt=`${guide.name}`)
+
+//-               - if (guide.role === 'lead-guide')
+//-                 span.overview-box__label Lead guide
+//-               - if (guide.role === 'guide')
+//-                 span.overview-box__label Tour guide
+//-               span.overview-box__text= guide.name
+
+//-     .description-box
+//-       h2.heading-secondary.ma-bt-lg= `About ${tour.name} tour`
+//-       - const parapraphs = tour.description.split('\n');
+//-       each p in parapraphs
+//-         p.description__text= p
+
+//-   section.section-pictures
+//-     each img, i in tour.images
+//-       .picture-box
+//-         img.picture-box__img(src=`/img/tours/${img}`, alt=`The Park Camper Tour ${i + 1}`, class=`picture-box__img--${i + 1}`)
+
+//-   section.section-map
+//-     #map(data-locations=`${JSON.stringify(tour.locations)}`)
+
+//-   section.section-reviews
+//-     .reviews
+//-       each review in tour.reviews
+//-         +reviewCard(review)
+
+//-   section.section-cta
+//-     .cta
+//-       .cta__img.cta__img--logo
+//-         img(src='/img/logo-white.png', alt='Natours logo')
+//-       img.cta__img.cta__img--1(src=`/img/tours/${tour.images[1]}`, alt='Tour picture')
+//-       img.cta__img.cta__img--2(src=`/img/tours/${tour.images[2]}`, alt='Tour picture')
+//-       .cta__content
+//-         h2.heading-secondary What are you waiting for?
+//-         p.cta__text= `${tour.duration} days. 1 adventure. Infinite memories. Make it yours today!`
+        
+//-         if user
+//-           button.btn.btn--green.span-all-rows#book-tour(data-tour-id=`${tour.id}`) Book tour now!
+//-         else
+//-           a.btn.btn--green.span-all-rows(href='/login') Log in to book tour

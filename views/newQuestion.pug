@@ -1,0 +1,12 @@
+extends base
+
+block content
+  main.main
+    .choice-view
+      .user-view__content
+        .user-view__form-container
+          h2.heading-secondary.ma-bt-md Create A new Question 
+          form.form.form
+            .form__group.left
+              a.btn.btn--small.btn--green.btn-margin(href=`/newChoiceQuestion?_id=${_id}`) Create Choice Question 
+              a.btn.btn--small.btn--green.btn-margin(href=`/newTextQuestion?_id=${_id}`) Create Text Question 
